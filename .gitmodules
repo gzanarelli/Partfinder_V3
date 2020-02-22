@@ -1,0 +1,6 @@
+[submodule "partfinder_API"]
+	path = partfinder_API
+	url = git@github.com:gzanarelli/partfinder_API.git
+[submodule "partfinder_WWW"]
+	path = partfinder_WWW
+	url = git@github.com:gzanarelli/partfinder_WWW.git
