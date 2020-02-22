@@ -1,0 +1,89 @@
+version: '3.1'
+
+services:
+  api:
+    tty: true
+    build:
+      context: ./partfinder_API
+      dockerfile: Dockerfile
+    volumes:
+      - "./partfinder_API:/app"
+    networks:
+      - webgateway
+      - default
+    depends_on:
+      - mongo
+    env_file:
+      - .env
+    environment:
+      DEBUG: 'partfinder:*'
+      DOMAIN: 'http://api.${DOMAIN}'
+
+      MONGODB_ADDON_URI: mongodb://mongo/partfinder
+      MONGODB_ADDON_DB: partfinder
+      MONGODB_ADDON_PASSWORD: ${DB_PASS}
+      MONGODB_ADDON_USER: ${DB_USER}
+      MONGO_ADDON_HOST: mongo
+
+      NODE_ENV: development
+      ENABLE_CLEAN: 'true'
+      GEOLOC_APIKEY: 'fb27c1a5a12c4e6498f4d86470153d55'
+      PORT: 8080
+
+    labels:
+      traefik.enable: 'true'
+      traefik.port: 8080
+      traefik.acme: 'false'
+      traefik.frontend.rule: 'Host:api.${DOMAIN}'
+      traefik.docker.network: 'traefikforwebdev_webgateway'
+      traefik.frontend.redirect.regex: ''
+      traefik.frontend.redirect.replacement: ''
+
+  mongo:
+    image: mongo:4
+    volumes:
+      - "./partfinder_API/database:/data/db"
+    ports:
+      - "28019:27017"
+    env_file:
+      - .env
+    environment:
+      MONGODB_ADDON_DB: partfinder
+      MONGO_INITDB_ROOT_PASSWORD: ${DB_PASS}
+      MONGO_INITDB_ROOT_USERNAME: ${DB_PASS}
+      MONGODB_ADDON_PASSWORD: ${DB_PASS}
+      MONGODB_ADDON_USER: ${DB_USER}
+    labels:
+      traefik.enable: "false"
+
+  www:
+    image: node:12.4
+    command: sh -c "cd app && npm run start"
+    volumes:
+      - "./partfinder_WWW:/app"
+    env_file:
+      - .env
+    environment:
+      REACT_APP_BACK_URL: ${BACK_URL}
+    depends_on:
+      - api
+    networks:
+      - webgateway
+      - default
+    labels:
+      traefik.enable: "true"
+      traefik.acme: "false"
+      traefik.port: "3000"
+      traefik.backend.loadbalancer.method: "drr"
+      traefik.backend: "www.${DOMAIN}"
+      traefik.frontend.rule: "Host:www.${DOMAIN}"
+      traefik.frontend.entryPoints: "http,https"
+      traefik.docker.network: "traefikforwebdev_webgateway"
+
+networks:
+  webgateway:
+    external:
+      name: traefikforwebdev_webgateway
+
+volumes:
+  database:
