@@ -25,14 +25,19 @@ services:
       MONGODB_ADDON_USER: ${DB_USER}
       MONGO_ADDON_HOST: mongo
 
+      TOKEN_HS512: 'rjufbrfrmofkirfvrfrf42rf7rfzded!:ede'
+      REFRESH_HS512: 'zozaxa534zefan-aèarf42rf7rfzded!:ede'
+      TOKEN_EXPIRE: '2h'
+      REFRESH_EXPIRE: '1d'
+
       NODE_ENV: development
       ENABLE_CLEAN: 'true'
       GEOLOC_APIKEY: 'fb27c1a5a12c4e6498f4d86470153d55'
-      PORT: 8080
+      PORT: 8082
 
     labels:
       traefik.enable: 'true'
-      traefik.port: 8080
+      traefik.port: 8082
       traefik.acme: 'false'
       traefik.frontend.rule: 'Host:api.${DOMAIN}'
       traefik.docker.network: 'traefikforwebdev_webgateway'
