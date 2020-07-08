@@ -25,8 +25,9 @@ services:
       MONGODB_ADDON_USER: ${DB_USER}
       MONGO_ADDON_HOST: mongo
 
-      TOKEN_HS512: 'rjufbrfrmofkirfvrfrf42rf7rfzded!:ede'
-      REFRESH_HS512: 'zozaxa534zefan-aèarf42rf7rfzded!:ede'
+      ALGO_TYPE: HS512
+      TOKEN_HS512: 'rjufbrfrmofkirfvrfrf42rf7rfzded'
+      REFRESH_HS512: 'iuegfhfklrfyrfbrlifr'
       TOKEN_EXPIRE: '2h'
       REFRESH_EXPIRE: '1d'
 
