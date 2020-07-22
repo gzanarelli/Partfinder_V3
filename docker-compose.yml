@@ -33,7 +33,7 @@ services:
 
       NODE_ENV: development
       ENABLE_CLEAN: 'true'
-      GEOLOC_APIKEY: 'fb27c1a5a12c4e6498f4d86470153d55'
+      GEOLOC_APIKEY: '651392b1297843d9b55e6e09e9587d2c'
       PORT: 8082
 
     labels:
